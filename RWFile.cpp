@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-void RWFile::ReadFile(Handler& handler, const char* inputName)
+void RWFile::ReadFile(Memory& memory, const char* inputName)
 {
 	std::fstream fsInput;
 	fsInput.open(inputName, std::fstream::in | std::fstream::out | std::fstream::app);
@@ -43,7 +43,7 @@ void RWFile::ReadFile(Handler& handler, const char* inputName)
 			data.erase(0, 8);
 			data.erase(data.size()-6, 6);
 			double elev = atof(data.data());
-			handler.GetPoints().push_back({ lat, lon, elev, t });
+			memory.AddPoint(lat, lon, elev, t);
 			std::getline(fsInput, data);
 		}
 	}

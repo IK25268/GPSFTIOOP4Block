@@ -1,12 +1,15 @@
 #include "Handler.hpp"
 #include "RWFile.hpp"
+#include "Memory.hpp"
 
 int main() {
+    Memory memory;
+    memory.AddSpdRange({0.0, 4.0});
+    memory.AddSpdRange({5.0, 7.0});
+    memory.AddSpdRange({8.0, 20.0});
+    RWFile::ReadFile(memory, "input.txt");
     Handler handler;
-    RWFile::ReadFile(handler, "input.txt");
-    std::list<std::pair<std::pair<double, double>, unsigned long long int>> speedIntervals = {};
-    speedIntervals.push_back({{0.0, 0.1}, 0});
-    handler.CalcValues(speedIntervals);
+    handler.CalcValues(memory, 0.3);
     handler.PrintValues();
     return 0;
 }

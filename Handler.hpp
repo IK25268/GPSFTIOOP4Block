@@ -1,19 +1,13 @@
 #ifndef __Handler_hpp
 #define __Handler_hpp
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <set>
+
+#include "Memory.hpp"
 #include <map>
-#include <list>
-#include <fstream>
 #include <iostream>
-#include "Point.hpp"
-#include <unordered_map>
+#include <string>
 
 class Handler final {
 private:
-	std::list<Point> points;
 	int summTime;//s
 	double distanñe;//m
 	double averSpeed;//m/s
@@ -25,23 +19,14 @@ private:
 	double maxAltit;//m
 	double summAscend;//m
 	double summDescend;//m
-	std::list<std::pair<std::pair<double, double>, unsigned long long int>> speedIntervals;
+	std::map<unsigned int, std::pair<std::string, unsigned long long int>> times;
+	void DistribRngSpd(Memory memory, double instSpd, unsigned long long int diffTime);
+	void AddTimesStr(Memory memory);
+	void CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, Point prevPoint, Point currPoint);
 public:
-	std::list<Point>& GetPoints();
-	int GetSummTime();
-	double GetDistanñe();//m
-	double GetAverSpeed();//m/s
-	int GetMoutTime();//s
-	int GetStopTime();//s
-	double GetAverMoutSpeed();//m/s
-	double GetMaxSpeed();//m/s
-	double GetMinAltit();//m
-	double GetMaxAltit();//m
-	double GetSummAscend();//m
-	double GetSummDescend();//m
-	void CalcValues(std::list<std::pair<std::pair<double, double>, unsigned long long int>> speedIntervals);
+	Handler();
+	void CalcValues(Memory memory, double spdThrshld = 0.3);
 	void PrintValues();
-	std::list<std::pair<std::pair<double, double>, unsigned long long int>> GetSpeedIntervals();
 };
 
 #endif

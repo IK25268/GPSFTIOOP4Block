@@ -62,6 +62,6 @@ double Point::DistanceTo(const Point& other)
 
 int Point::TimeTo(const Point& other)
 {
-    return 0;
+    return other.time - time;
 }
 

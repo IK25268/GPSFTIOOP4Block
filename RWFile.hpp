@@ -2,12 +2,12 @@
 #define __RWFile_hpp
 #include <fstream>
 #include <iostream>
-#include "Handler.hpp"
+#include "Memory.hpp"
 
 class RWFile final {
 private:
 public:
-	static void ReadFile(Handler& handler, const char* inputName);
+	static void ReadFile(Memory& memory, const char* inputName);
 };
 
 #endif

@@ -1,132 +1,96 @@
 #include "Handler.hpp"
 
-std::list<Point>& Handler::GetPoints()
+Handler::Handler()
 {
-	return points;
+	summTime = 0;//s
+	distanñe = 0.0;//m
+	averSpeed = 0.0;//m/s
+	moutTime = 0;//s
+	stopTime = 0;//s
+	averMoutSpeed = 0.0;//m/s
+	maxSpeed = 0.0;//m/s
+	minAltit =  0.0;//m
+	maxAltit = 0.0;//m
+	summAscend = 0.0;//m
+	summDescend = 0.0;//m
 }
 
-int Handler::GetSummTime()
+void Handler::CalcValues(Memory memory, double spdThrshld)
 {
-	return summTime;
-}
-
-double Handler::GetDistanñe()
-{
-	return distanñe;
-}
-
-double Handler::GetAverSpeed()
-{
-	return averSpeed;
-}
-
-int Handler::GetMoutTime()
-{
-	return moutTime;
-}
-
-int Handler::GetStopTime()
-{
-	return stopTime;
-}
-
-double Handler::GetAverMoutSpeed()
-{
-	return averMoutSpeed;
-}
-
-double Handler::GetMaxSpeed()
-{
-	return maxSpeed;
-}
-
-double Handler::GetMinAltit()
-{
-	return minAltit;
-}
-
-double Handler::GetMaxAltit()
-{
-	return maxAltit;
-}
-
-double Handler::GetSummAscend()
-{
-	return summAscend;
-}
-
-double Handler::GetSummDescend()
-{
-	return summDescend;
-}
-
-void Handler::CalcValues(std::list<std::pair<std::pair<double, double>, unsigned long long int>> speedIntervals)
-{
+	Point prevPoint = memory.ReturnPoints().front();
 	unsigned long long int diffTime = 0;
 	double diffDist = 0.0;
 	double diffElev = 0.0;
-	double prevElev = points.front().GetElevation();
-	unsigned long long int prevTime = points.front().GetTime();
-	double prevLat = points.front().GetLatitude();
-	double prevLon = points.front().GetLongitude();	
 	double instSpd = 0.0;
-
-	maxSpeed = 0.0;
-	minAltit = points.front().GetElevation();
-	maxAltit = points.front().GetElevation();
-	for (auto& interval : speedIntervals)
+	minAltit = memory.ReturnPoints().front().GetElevation();
+	maxAltit = memory.ReturnPoints().front().GetElevation();
+	AddTimesStr(memory);
+	for (auto& currPoint : memory.ReturnPoints())
 	{
-		interval.second = 0;
-	}
-	for (auto& iter : points)
-	{
-		diffTime += iter.GetTime() - prevTime;
+		CalcDiff(diffTime, diffDist, diffElev, instSpd, prevPoint, currPoint);
 		summTime += diffTime;
-		prevTime = iter.GetTime();
-
-		diffDist += sqrt(pow((iter.GetLatitude()-prevLat), 2) + pow((iter.GetLongitude() - prevLon), 2));
 		distanñe += diffDist;
-		prevLat = iter.GetLatitude();
-		prevLon = iter.GetLongitude();
-
-		if (diffDist < 0.01) stopTime += diffTime;
+		if (instSpd < spdThrshld) stopTime += diffTime;
 		else moutTime += diffTime;
-
-		instSpd = diffDist / diffTime;
-
 		if (instSpd > maxSpeed) maxSpeed = instSpd;
-		if (iter.GetElevation() > maxAltit) maxAltit = iter.GetElevation();
-		if (iter.GetElevation() < minAltit) minAltit = iter.GetElevation();
-
-		diffElev = iter.GetElevation() - prevElev;
+		if (currPoint.GetElevation() > maxAltit) maxAltit = currPoint.GetElevation();
+		if (currPoint.GetElevation() < minAltit) minAltit = currPoint.GetElevation();
 		if (diffElev > 0.0) summAscend += diffElev;
 		if (diffElev < 0.0) summDescend += abs(diffElev);
-		for (auto& interval : speedIntervals)
-		{
-			if ((instSpd >= interval.first.first) && (instSpd <= interval.first.second)) interval.second += diffTime;
-		}
+		DistribRngSpd(memory, instSpd, diffTime);
+		prevPoint = currPoint;
 	}
 	averSpeed = distanñe / summTime;
 	averMoutSpeed = distanñe / moutTime;
-	std::cout << std::endl;
 }
 
 void Handler::PrintValues()
 {
-	std::cout << "summTime " << GetSummTime() << std::endl;
-	std::cout << "distanñe " << GetDistanñe() << std::endl;
-	std::cout << "averSpeed " << GetAverSpeed() << std::endl;
-	std::cout << "moutTime " << GetMoutTime() << std::endl;
-	std::cout << "stopTime " << GetStopTime() << std::endl;
-	std::cout << "averMoutSpeed " << GetAverMoutSpeed() << std::endl;
-	std::cout << "maxSpeed " << GetMaxSpeed() << std::endl;
-	std::cout << "minAltit " << GetMinAltit() << std::endl;
-	std::cout << "maxAltit " << GetMaxAltit() << std::endl;
-	std::cout << "summAscend " << GetSummAscend() << std::endl;
-	std::cout << "summDescend " << GetSummDescend() << std::endl;
+	std::cout << "summTime " << summTime << std::endl;
+	std::cout << "distance " << distanñe << std::endl;
+	std::cout << "averSpeed " << averSpeed << std::endl;
+	std::cout << "moutTime " << moutTime << std::endl;
+	std::cout << "stopTime " << stopTime << std::endl;
+	std::cout << "averMoutSpeed " << averMoutSpeed << std::endl;
+	std::cout << "maxSpeed " << maxSpeed << std::endl;
+	std::cout << "minAltit " << minAltit << std::endl;
+	std::cout << "maxAltit " << maxAltit << std::endl;
+	std::cout << "summAscend " << summAscend << std::endl;
+	std::cout << "summDescend " << summDescend << std::endl;
+	for (auto& time : times)
+	{
+		std::cout << "interval from to ";
+		std::cout << time.second.first;
+		std::cout << " duration ";
+		std::cout << time.second.second << std::endl;
+	}
 }
 
-std::list<std::pair<std::pair<double, double>, unsigned long long int>> Handler::GetSpeedIntervals()
+void Handler::DistribRngSpd(Memory memory, double instSpd, unsigned long long int diffTime)
 {
-	return speedIntervals;
+	int j = 0;
+	for (auto& interval : memory.ReturnSpeedIntervals())
+	{
+		if ((instSpd >= interval.second.first) && (instSpd <= interval.second.second)) times[j].second += diffTime;
+		j++;
+	}
+}
+
+void Handler::AddTimesStr(Memory memory)
+{
+	for (unsigned int i = 0; i < memory.ReturnSpeedIntervals().size(); i++)
+	{
+		std::string range = std::to_string(memory.ReturnSpeedIntervals()[i].first);
+		range += " ";
+		range += std::to_string(memory.ReturnSpeedIntervals()[i].second);
+		times.insert({ i, {range, 0} });
+	}
+}
+
+void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, Point prevPoint, Point currPoint)
+{
+	diffTime = prevPoint.TimeTo(currPoint);
+	diffElev = currPoint.GetElevation() - prevPoint.GetElevation();
+	diffDist = prevPoint.DistanceTo(currPoint);
+	instSpd = (diffTime == 0.0) ? 0.0 : diffDist / diffTime;
 }
