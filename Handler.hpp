@@ -25,6 +25,18 @@ private:
 	void CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, Point prevPoint, Point currPoint);
 public:
 	Handler();
+	int GetSummTime();//s
+	double GetDistanñe();//m
+	double GetAverSpeed();//m/s
+	int GetMoutTime();//s
+	int GetStopTime();//s
+	double GetAverMoutSpeed();//m/s
+	double GetMaxSpeed();//m/s
+	double GetMinAltit();//m
+	double GetMaxAltit();//m
+	double GetSummAscend();//m
+	double GetSummDescend();//m
+	std::map<unsigned int, std::pair<std::string, unsigned long long int>> GetTimes();
 	void CalcValues(Memory memory, double spdThrshld = 0.3);
 	void PrintValues();
 };

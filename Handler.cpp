@@ -44,6 +44,26 @@ void Handler::CalcValues(Memory memory, double spdThrshld)
 	averMoutSpeed = distanñe / moutTime;
 }
 
+int Handler::GetSummTime()
+{
+	return summTime;
+}
+
+double Handler::GetDistanñe()
+{
+	return distanñe;
+}
+
+double Handler::GetAverSpeed()
+{
+	return averSpeed;
+}
+
+int Handler::GetMoutTime()
+{
+	return moutTime;
+}
+
 void Handler::PrintValues()
 {
 	std::cout << "summTime " << summTime << std::endl;
@@ -93,4 +113,44 @@ void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, doubl
 	diffElev = currPoint.GetElevation() - prevPoint.GetElevation();
 	diffDist = prevPoint.DistanceTo(currPoint);
 	instSpd = (diffTime == 0.0) ? 0.0 : diffDist / diffTime;
+}
+
+int Handler::GetStopTime()
+{
+	return stopTime;
+}
+
+double Handler::GetAverMoutSpeed()
+{
+	return averMoutSpeed;
+}
+
+double Handler::GetMaxSpeed()
+{
+	return maxSpeed;
+}
+
+double Handler::GetMinAltit()
+{
+	return minAltit;
+}
+
+double Handler::GetMaxAltit()
+{
+	return maxAltit;
+}
+
+double Handler::GetSummAscend()
+{
+	return summAscend;
+}
+
+double Handler::GetSummDescend()
+{
+	return summDescend;
+}
+
+std::map<unsigned int, std::pair<std::string, unsigned long long int>> Handler::GetTimes()
+{
+	return times;
 }
