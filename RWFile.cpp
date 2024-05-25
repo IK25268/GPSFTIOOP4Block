@@ -3,8 +3,9 @@
 #include <iostream>
 #include <sstream>
 
-void RWFile::ReadFile(Memory& memory, const char* inputName)
+Memory RWFile::ReadFile(const std::string& inputName)
 {
+	Memory memory;
 	std::fstream fsInput;
 	fsInput.open(inputName, std::fstream::in | std::fstream::out | std::fstream::app);
 	std::string data = "";
@@ -43,9 +44,32 @@ void RWFile::ReadFile(Memory& memory, const char* inputName)
 			data.erase(0, 8);
 			data.erase(data.size()-6, 6);
 			double elev = atof(data.data());
-			memory.AddPoint(lat, lon, elev, t);
+			memory.AddPoint({ lat, lon, elev, t });
 			std::getline(fsInput, data);
 		}
 	}
 	fsInput.close();
+	return memory;
+}
+
+void RWFile::PrintValues(const Handler& handler)
+{
+	std::cout << "summTime " << handler.GetSummTime() << std::endl;
+	std::cout << "distance " << handler.GetDistanñe() << std::endl;
+	std::cout << "averSpeed " << handler.GetAverSpeed() << std::endl;
+	std::cout << "moutTime " << handler.GetMoutTime() << std::endl;
+	std::cout << "stopTime " << handler.GetStopTime() << std::endl;
+	std::cout << "averMoutSpeed " << handler.GetAverMoutSpeed() << std::endl;
+	std::cout << "maxSpeed " << handler.GetMaxSpeed() << std::endl;
+	std::cout << "minAltit " << handler.GetMinAltit() << std::endl;
+	std::cout << "maxAltit " << handler.GetMaxAltit() << std::endl;
+	std::cout << "summAscend " << handler.GetSummAscend() << std::endl;
+	std::cout << "summDescend " << handler.GetSummDescend() << std::endl;
+	for (auto& time : handler.GetTimes())
+	{
+		std::cout << "interval from to ";
+		std::cout << time.second.first;
+		std::cout << " duration ";
+		std::cout << time.second.second << std::endl;
+	}
 }

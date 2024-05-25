@@ -15,17 +15,17 @@ Handler::Handler()
 	summDescend = 0.0;//m
 }
 
-void Handler::CalcValues(Memory memory, double spdThrshld)
+void Handler::CalcValues(const Memory& memory, double spdThrshld)
 {
-	Point prevPoint = memory.ReturnPoints().front();
+	Point prevPoint = memory.GetPoints().front();
 	unsigned long long int diffTime = 0;
 	double diffDist = 0.0;
 	double diffElev = 0.0;
 	double instSpd = 0.0;
-	minAltit = memory.ReturnPoints().front().GetElevation();
-	maxAltit = memory.ReturnPoints().front().GetElevation();
+	minAltit = memory.GetPoints().front().GetElevation();
+	maxAltit = memory.GetPoints().front().GetElevation();
 	AddTimesStr(memory);
-	for (auto& currPoint : memory.ReturnPoints())
+	for (auto& currPoint : memory.GetPoints())
 	{
 		CalcDiff(diffTime, diffDist, diffElev, instSpd, prevPoint, currPoint);
 		summTime += diffTime;
@@ -44,70 +44,48 @@ void Handler::CalcValues(Memory memory, double spdThrshld)
 	averMoutSpeed = distanñe / moutTime;
 }
 
-int Handler::GetSummTime()
+int Handler::GetSummTime() const
 {
 	return summTime;
 }
 
-double Handler::GetDistanñe()
+double Handler::GetDistanñe() const
 {
 	return distanñe;
 }
 
-double Handler::GetAverSpeed()
+double Handler::GetAverSpeed() const
 {
 	return averSpeed;
 }
 
-int Handler::GetMoutTime()
+int Handler::GetMoutTime() const
 {
 	return moutTime;
 }
 
-void Handler::PrintValues()
-{
-	std::cout << "summTime " << summTime << std::endl;
-	std::cout << "distance " << distanñe << std::endl;
-	std::cout << "averSpeed " << averSpeed << std::endl;
-	std::cout << "moutTime " << moutTime << std::endl;
-	std::cout << "stopTime " << stopTime << std::endl;
-	std::cout << "averMoutSpeed " << averMoutSpeed << std::endl;
-	std::cout << "maxSpeed " << maxSpeed << std::endl;
-	std::cout << "minAltit " << minAltit << std::endl;
-	std::cout << "maxAltit " << maxAltit << std::endl;
-	std::cout << "summAscend " << summAscend << std::endl;
-	std::cout << "summDescend " << summDescend << std::endl;
-	for (auto& time : times)
-	{
-		std::cout << "interval from to ";
-		std::cout << time.second.first;
-		std::cout << " duration ";
-		std::cout << time.second.second << std::endl;
-	}
-}
-
-void Handler::DistribRngSpd(Memory memory, double instSpd, unsigned long long int diffTime)
+void Handler::DistribRngSpd(const Memory& memory, const double& instSpd, const unsigned long long int& diffTime)
 {
 	int j = 0;
-	for (auto& interval : memory.ReturnSpeedIntervals())
+	for (auto& interval : memory.GetSpeedIntervals())
 	{
 		if ((instSpd >= interval.second.first) && (instSpd <= interval.second.second)) times[j].second += diffTime;
 		j++;
 	}
 }
 
-void Handler::AddTimesStr(Memory memory)
+void Handler::AddTimesStr(const Memory& memory)
 {
-	for (unsigned int i = 0; i < memory.ReturnSpeedIntervals().size(); i++)
+	for (unsigned int i = 0; i < memory.GetSpeedIntervals().size(); i++)
 	{
-		std::string range = std::to_string(memory.ReturnSpeedIntervals()[i].first);
+		std::string range = std::to_string(memory.GetSpeedIntervals()[i].first);
 		range += " ";
-		range += std::to_string(memory.ReturnSpeedIntervals()[i].second);
+		range += std::to_string(memory.GetSpeedIntervals()[i].second);
 		times.insert({ i, {range, 0} });
 	}
 }
 
-void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, Point prevPoint, Point currPoint)
+void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, const Point& prevPoint, const Point& currPoint)
 {
 	diffTime = prevPoint.TimeTo(currPoint);
 	diffElev = currPoint.GetElevation() - prevPoint.GetElevation();
@@ -115,42 +93,42 @@ void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, doubl
 	instSpd = (diffTime == 0.0) ? 0.0 : diffDist / diffTime;
 }
 
-int Handler::GetStopTime()
+int Handler::GetStopTime() const
 {
 	return stopTime;
 }
 
-double Handler::GetAverMoutSpeed()
+double Handler::GetAverMoutSpeed() const
 {
 	return averMoutSpeed;
 }
 
-double Handler::GetMaxSpeed()
+double Handler::GetMaxSpeed() const
 {
 	return maxSpeed;
 }
 
-double Handler::GetMinAltit()
+double Handler::GetMinAltit() const
 {
 	return minAltit;
 }
 
-double Handler::GetMaxAltit()
+double Handler::GetMaxAltit() const
 {
 	return maxAltit;
 }
 
-double Handler::GetSummAscend()
+double Handler::GetSummAscend() const
 {
 	return summAscend;
 }
 
-double Handler::GetSummDescend()
+double Handler::GetSummDescend() const
 {
 	return summDescend;
 }
 
-std::map<unsigned int, std::pair<std::string, unsigned long long int>> Handler::GetTimes()
+std::map<unsigned int, std::pair<std::string, unsigned long long int>> Handler::GetTimes() const
 {
 	return times;
 }

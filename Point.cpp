@@ -1,13 +1,11 @@
 #include "Point.hpp"
 
-
-const double MAJOR_AXIS = 6378137.0,    // большая ось эллипсоида, м
-MINOR_AXIS = 6356752.3142, // малая ось эллипсоида, м
-MAJOR_AXIS_POW_2 = MAJOR_AXIS * MAJOR_AXIS,
-MINOR_AXIS_POW_2 = MINOR_AXIS * MINOR_AXIS,
-PI = 3.14159265358979323846264338327950288;
-
 namespace {
+    const double MAJOR_AXIS = 6378137.0,    // большая ось эллипсоида, м
+        MINOR_AXIS = 6356752.3142, // малая ось эллипсоида, м
+        MAJOR_AXIS_POW_2 = MAJOR_AXIS * MAJOR_AXIS,
+        MINOR_AXIS_POW_2 = MINOR_AXIS * MINOR_AXIS,
+        PI = 2 * acos(0.0);
     inline double deg2rad(double deg) {
         return deg * PI / 180.0;
     }
@@ -37,7 +35,7 @@ namespace {
     }
 }
 
-double Point::DistanceTo(const Point& other)
+double Point::DistanceTo(const Point& other) const
 {
     double true_angle_1 = trueAngle(*this);
     double true_angle_2 = trueAngle(other);
@@ -60,7 +58,7 @@ double Point::DistanceTo(const Point& other)
     return sqrt(square(dx) + square(dy));
 }
 
-int Point::TimeTo(const Point& other)
+int Point::TimeTo(const Point& other) const
 {
     return other.time - time;
 }

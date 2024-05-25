@@ -22,9 +22,9 @@ public:
     int GetTime() const { return time; }
 
     // Расстояние до другой точки
-    double DistanceTo(const Point& other);
+    double DistanceTo(const Point& other) const;
 
-    int TimeTo(const Point& other);
+    int TimeTo(const Point& other) const;
 };
 
 #endif

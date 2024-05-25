@@ -20,25 +20,25 @@ private:
 	double summAscend;//m
 	double summDescend;//m
 	std::map<unsigned int, std::pair<std::string, unsigned long long int>> times;
-	void DistribRngSpd(Memory memory, double instSpd, unsigned long long int diffTime);
-	void AddTimesStr(Memory memory);
-	void CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, Point prevPoint, Point currPoint);
+	void DistribRngSpd(const Memory& memory, const double& instSpd, const unsigned long long int& diffTime);
+	void AddTimesStr(const Memory& memory);
+	void CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, const Point& prevPoint, const Point& currPoint);
 public:
 	Handler();
-	int GetSummTime();//s
-	double GetDistanñe();//m
-	double GetAverSpeed();//m/s
-	int GetMoutTime();//s
-	int GetStopTime();//s
-	double GetAverMoutSpeed();//m/s
-	double GetMaxSpeed();//m/s
-	double GetMinAltit();//m
-	double GetMaxAltit();//m
-	double GetSummAscend();//m
-	double GetSummDescend();//m
-	std::map<unsigned int, std::pair<std::string, unsigned long long int>> GetTimes();
-	void CalcValues(Memory memory, double spdThrshld = 0.3);
-	void PrintValues();
+	int GetSummTime() const;//s
+	double GetDistanñe() const;//m
+	double GetAverSpeed() const;//m/s
+	int GetMoutTime() const;//s
+	int GetStopTime() const;//s
+	double GetAverMoutSpeed() const;//m/s
+	double GetMaxSpeed() const;//m/s
+	double GetMinAltit() const;//m
+	double GetMaxAltit() const;//m
+	double GetSummAscend() const;//m
+	double GetSummDescend() const;//m
+	std::map<unsigned int, std::pair<std::string, unsigned long long int>> GetTimes() const;
+	void CalcValues(const Memory& memory, double spdThrshld = 0.3);
+	
 };
 
 #endif

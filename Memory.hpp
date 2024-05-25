@@ -9,10 +9,10 @@ private:
 	std::list<Point> points;
 	std::map<unsigned int, std::pair<double, double>> speedIntervals;
 public:
-	void AddSpdRange(std::pair<double, double> range);
-	std::list<Point> ReturnPoints();
-	void AddPoint(double _lat, double _log, double _elev, unsigned long long int _time);
-	std::map<unsigned int, std::pair<double, double>> ReturnSpeedIntervals();
+	void AddSpdRange(const std::pair<double, double>& range);
+	std::list<Point> GetPoints() const;
+	void AddPoint(const Point& point);
+	std::map<unsigned int, std::pair<double, double>> GetSpeedIntervals() const;
 };
 
 #endif
