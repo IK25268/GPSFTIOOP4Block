@@ -52,24 +52,24 @@ Memory RWFile::ReadFile(const std::string& inputName)
 	return memory;
 }
 
-void RWFile::PrintValues(const Handler& handler)
+void RWFile::PrintValues(const Handler& handler, const DistribSpd& distribSpd, std::ostream& streamOut)
 {
-	std::cout << "summTime " << handler.GetSummTime() << std::endl;
-	std::cout << "distance " << handler.GetDistanñe() << std::endl;
-	std::cout << "averSpeed " << handler.GetAverSpeed() << std::endl;
-	std::cout << "moutTime " << handler.GetMoutTime() << std::endl;
-	std::cout << "stopTime " << handler.GetStopTime() << std::endl;
-	std::cout << "averMoutSpeed " << handler.GetAverMoutSpeed() << std::endl;
-	std::cout << "maxSpeed " << handler.GetMaxSpeed() << std::endl;
-	std::cout << "minAltit " << handler.GetMinAltit() << std::endl;
-	std::cout << "maxAltit " << handler.GetMaxAltit() << std::endl;
-	std::cout << "summAscend " << handler.GetSummAscend() << std::endl;
-	std::cout << "summDescend " << handler.GetSummDescend() << std::endl;
-	for (auto& time : handler.GetTimes())
+	streamOut << "summTime " << handler.GetSummTime() << std::endl;
+	streamOut << "distance " << handler.GetDistanñe() << std::endl;
+	streamOut << "averSpeed " << handler.GetAverSpeed() << std::endl;
+	streamOut << "moutTime " << handler.GetMoutTime() << std::endl;
+	streamOut << "stopTime " << handler.GetStopTime() << std::endl;
+	streamOut << "averMoutSpeed " << handler.GetAverMoutSpeed() << std::endl;
+	streamOut << "maxSpeed " << handler.GetMaxSpeed() << std::endl;
+	streamOut << "minAltit " << handler.GetMinAltit() << std::endl;
+	streamOut << "maxAltit " << handler.GetMaxAltit() << std::endl;
+	streamOut << "summAscend " << handler.GetSummAscend() << std::endl;
+	streamOut << "summDescend " << handler.GetSummDescend() << std::endl;
+	for (auto& time : distribSpd.GetTimes())
 	{
-		std::cout << "interval from to ";
-		std::cout << time.second.first;
-		std::cout << " duration ";
-		std::cout << time.second.second << std::endl;
+		streamOut << "interval from to ";
+		streamOut << time.first;
+		streamOut << " duration ";
+		streamOut << time.second << std::endl;
 	}
 }

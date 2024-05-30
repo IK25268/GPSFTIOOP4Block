@@ -24,7 +24,6 @@ void Handler::CalcValues(const Memory& memory, double spdThrshld)
 	double instSpd = 0.0;
 	minAltit = memory.GetPoints().front().GetElevation();
 	maxAltit = memory.GetPoints().front().GetElevation();
-	AddTimesStr(memory);
 	for (auto& currPoint : memory.GetPoints())
 	{
 		CalcDiff(diffTime, diffDist, diffElev, instSpd, prevPoint, currPoint);
@@ -37,7 +36,6 @@ void Handler::CalcValues(const Memory& memory, double spdThrshld)
 		if (currPoint.GetElevation() < minAltit) minAltit = currPoint.GetElevation();
 		if (diffElev > 0.0) summAscend += diffElev;
 		if (diffElev < 0.0) summDescend += abs(diffElev);
-		DistribRngSpd(memory, instSpd, diffTime);
 		prevPoint = currPoint;
 	}
 	averSpeed = distanñe / summTime;
@@ -62,27 +60,6 @@ double Handler::GetAverSpeed() const
 int Handler::GetMoutTime() const
 {
 	return moutTime;
-}
-
-void Handler::DistribRngSpd(const Memory& memory, const double& instSpd, const unsigned long long int& diffTime)
-{
-	int j = 0;
-	for (auto& interval : memory.GetSpeedIntervals())
-	{
-		if ((instSpd >= interval.second.first) && (instSpd <= interval.second.second)) times[j].second += diffTime;
-		j++;
-	}
-}
-
-void Handler::AddTimesStr(const Memory& memory)
-{
-	for (unsigned int i = 0; i < memory.GetSpeedIntervals().size(); i++)
-	{
-		std::string range = std::to_string(memory.GetSpeedIntervals()[i].first);
-		range += " ";
-		range += std::to_string(memory.GetSpeedIntervals()[i].second);
-		times.insert({ i, {range, 0} });
-	}
 }
 
 void Handler::CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, const Point& prevPoint, const Point& currPoint)
@@ -126,9 +103,4 @@ double Handler::GetSummAscend() const
 double Handler::GetSummDescend() const
 {
 	return summDescend;
-}
-
-std::map<unsigned int, std::pair<std::string, unsigned long long int>> Handler::GetTimes() const
-{
-	return times;
 }

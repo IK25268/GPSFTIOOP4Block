@@ -9,6 +9,12 @@ int main() {
     memory.AddSpdRange({8.0, 20.0});
     Handler handler;
     handler.CalcValues(memory, 0.3);
-    RWFile::PrintValues(handler);
+    DistribSpd distribSpd;
+    distribSpd.CalcRngSpd(memory);
+    RWFile::PrintValues(handler, distribSpd, std::cout);
+    std::ofstream out;
+    out.open("out.txt");
+    if (out.is_open()) RWFile::PrintValues(handler, distribSpd, out);
+    out.close();
     return 0;
 }

@@ -7,6 +7,8 @@
 #include "../GPSFTIOOP4Block/Handler.cpp"
 #include "../GPSFTIOOP4Block/Point.cpp"
 #include "../GPSFTIOOP4Block/Point.hpp"
+#include "../GPSFTIOOP4Block/DistribSpd.hpp"
+#include "../GPSFTIOOP4Block/DistribSpd.cpp"
 
 TEST(TestCalcValues, TestDistance) {
 	
@@ -94,9 +96,9 @@ TEST(TestCalcValues, TestDistribSpd) {
 	memory.AddSpdRange({ 0.0, 4.0 });
 	memory.AddSpdRange({ 5.0, 7.0 });
 	memory.AddSpdRange({ 8.0, 20.0 });
-	Handler handler;
-	handler.CalcValues(memory, 0.3);
-	ASSERT_EQ(handler.GetTimes()[0].second, 3057);
-	ASSERT_EQ(handler.GetTimes()[1].second, 394);
-	ASSERT_EQ(handler.GetTimes()[2].second, 14);
+	DistribSpd distribSpd;
+	distribSpd.CalcRngSpd(memory);
+	ASSERT_EQ(distribSpd.GetTimes()[0].second, 3057);
+	ASSERT_EQ(distribSpd.GetTimes()[1].second, 394);
+	ASSERT_EQ(distribSpd.GetTimes()[2].second, 14);
 }

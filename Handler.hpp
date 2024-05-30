@@ -19,9 +19,6 @@ private:
 	double maxAltit;//m
 	double summAscend;//m
 	double summDescend;//m
-	std::map<unsigned int, std::pair<std::string, unsigned long long int>> times;
-	void DistribRngSpd(const Memory& memory, const double& instSpd, const unsigned long long int& diffTime);
-	void AddTimesStr(const Memory& memory);
 	void CalcDiff(unsigned long long int& diffTime, double& diffDist, double& diffElev, double& instSpd, const Point& prevPoint, const Point& currPoint);
 public:
 	Handler();
@@ -36,9 +33,7 @@ public:
 	double GetMaxAltit() const;//m
 	double GetSummAscend() const;//m
 	double GetSummDescend() const;//m
-	std::map<unsigned int, std::pair<std::string, unsigned long long int>> GetTimes() const;
 	void CalcValues(const Memory& memory, double spdThrshld = 0.3);
-	
 };
 
 #endif

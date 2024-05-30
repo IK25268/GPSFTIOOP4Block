@@ -3,16 +3,17 @@
 #include "Point.hpp"
 #include <list>
 #include <map>
+#include <vector>
 
 class Memory final {
 private:
 	std::list<Point> points;
-	std::map<unsigned int, std::pair<double, double>> speedIntervals;
+	std::vector<std::pair<double, double>> speedIntervals;
 public:
 	void AddSpdRange(const std::pair<double, double>& range);
 	std::list<Point> GetPoints() const;
 	void AddPoint(const Point& point);
-	std::map<unsigned int, std::pair<double, double>> GetSpeedIntervals() const;
+	std::vector<std::pair<double, double>> GetSpeedIntervals() const;
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 void Memory::AddSpdRange(const std::pair<double, double>& range)
 {
-	speedIntervals.insert({speedIntervals.size(), range});
+	speedIntervals.push_back(range);
 }
 
 std::list<Point> Memory::GetPoints() const
@@ -15,7 +15,7 @@ void Memory::AddPoint(const Point& point)
 	points.push_back(point);
 }
 
-std::map<unsigned int, std::pair<double, double>> Memory::GetSpeedIntervals() const
+std::vector<std::pair<double, double>> Memory::GetSpeedIntervals() const
 {
 	return speedIntervals;
 }
